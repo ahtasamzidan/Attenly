@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Attendance</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+</head>
+
+<body class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 min-h-screen flex items-center justify-center">
+
+<div class="bg-white rounded-2xl shadow-2xl p-6 w-96 text-center">
+
+<h1 class="text-2xl font-bold text-gray-800 mb-2">
+Smart Attendance
+</h1>
+
+<p class="text-gray-500 mb-4">
+Scan QR to Check In
+</p>
+
+<div id="reader" class="rounded-xl overflow-hidden"></div>
+
+<button onclick="getLocation()" 
+class="mt-5 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold transition">
+
+Capture GPS Location
+
+</button>
+
+<p id="location" class="text-sm text-gray-500 mt-3"></p>
+
+</div>
+
+<script>
+
+function onScanSuccess(decodedText) {
+
+alert("QR Scanned: " + decodedText)
+
+}
+
+let scanner = new Html5QrcodeScanner("reader",{ fps:10, qrbox:200 })
+
+scanner.render(onScanSuccess)
+
+function getLocation() {
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+document.getElementById("location").innerText =
+"Lat: " + position.coords.latitude +
+" | Lng: " + position.coords.longitude
+
+})
+
+}
+
+</script>
+
+</body>
+</html>

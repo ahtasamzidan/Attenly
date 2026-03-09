@@ -1,39 +1,100 @@
-let html5QrCode;
+const officeLat = 3.1390
+const officeLng = 101.6869
+const radius = 120
+
+let html5QrCode
 
 function startScanner(){
 
-document.getElementById("scanner").classList.remove("hidden");
+const name = document.getElementById("name").value
 
-html5QrCode = new Html5Qrcode("reader");
+if(!name){
+alert("Please enter your name")
+return
+}
+
+document.getElementById("scanner").classList.remove("hidden")
+
+html5QrCode = new Html5Qrcode("reader")
 
 Html5Qrcode.getCameras().then(devices => {
 
-let backCamera = devices[devices.length-1].id;
+let backCamera = devices[devices.length-1].id
 
 html5QrCode.start(
 backCamera,
 { fps:10, qrbox:250 },
-onScanSuccess
-);
+text => onScan(text,name)
+)
 
-});
+})
 
 }
 
-function onScanSuccess(decodedText){
+function onScan(qrText,name){
 
-navigator.geolocation.getCurrentPosition(function(pos){
+navigator.geolocation.getCurrentPosition(pos=>{
 
-let lat = pos.coords.latitude;
-let lng = pos.coords.longitude;
+let lat = pos.coords.latitude
+let lng = pos.coords.longitude
 
-let map="https://maps.google.com/?q="+lat+","+lng;
+let dist = distance(lat,lng,officeLat,officeLng)
 
-document.getElementById("status").innerHTML=
-"QR: "+decodedText+
-"<br>Location: "+lat+", "+lng+
-"<br><a href='"+map+"' target='_blank'>Open Map</a>";
+if(dist > radius){
 
-});
+alert("You are outside office location")
+return
+
+}
+
+let map = "https://maps.google.com/?q="+lat+","+lng
+
+let date = new Date().toLocaleDateString()
+let time = new Date().toLocaleTimeString()
+
+fetch("YOUR_SCRIPT_URL",{
+
+method:"POST",
+
+body:JSON.stringify({
+
+name:name,
+qr:qrText,
+lat:lat,
+lng:lng,
+map:map,
+date:date,
+time:time
+
+})
+
+})
+
+document.getElementById("success").classList.remove("hidden")
+
+})
+
+}
+
+/* distance calculation */
+
+function distance(lat1, lon1, lat2, lon2){
+
+const R = 6371e3
+
+const φ1 = lat1*Math.PI/180
+const φ2 = lat2*Math.PI/180
+
+const Δφ = (lat2-lat1)*Math.PI/180
+const Δλ = (lon2-lon1)*Math.PI/180
+
+const a =
+Math.sin(Δφ/2)*Math.sin(Δφ/2) +
+Math.cos(φ1)*Math.cos(φ2) *
+Math.sin(Δλ/2)*Math.sin(Δλ/2)
+
+const c = 2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))
+
+return R*c
 
 }

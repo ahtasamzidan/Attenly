@@ -11,36 +11,53 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
 
+<style>
+
+body{
+background: radial-gradient(circle at 20% 20%, #6366f1, transparent 40%),
+radial-gradient(circle at 80% 30%, #a855f7, transparent 40%),
+radial-gradient(circle at 50% 80%, #ec4899, transparent 40%),
+#020617;
+}
+
+.glass{
+background: rgba(255,255,255,0.08);
+backdrop-filter: blur(20px);
+border: 1px solid rgba(255,255,255,0.15);
+}
+
+</style>
+
 </head>
 
-<body class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 min-h-screen flex items-center justify-center text-white">
+<body class="min-h-screen flex items-center justify-center text-white">
 
-<div class="bg-white text-gray-800 rounded-3xl shadow-xl p-6 w-96 text-center">
+<div class="glass rounded-3xl p-8 w-96 text-center shadow-2xl">
 
-<h1 class="text-3xl font-bold mb-2">Attenly</h1>
-<p class="text-gray-500 mb-4">Smart QR Attendance</p>
+<h1 class="text-4xl font-bold mb-2 tracking-wide">
+Attenly
+</h1>
 
-<!-- PROCESS STEPS -->
+<p class="text-gray-300 mb-6">
+Smart QR Attendance
+</p>
 
 <div id="intro">
 
-<img src="https://cdn-icons-png.flaticon.com/512/942/942748.png" 
-class="w-20 mx-auto mb-4">
+<div class="text-sm text-gray-300 mb-6 leading-relaxed">
 
-<p class="text-sm text-gray-600 mb-4">
-
-1️⃣ Press Start Attendance  
+1️⃣ Start attendance  
 <br>
-2️⃣ Scan the QR Code  
+2️⃣ Scan QR code  
 <br>
 3️⃣ GPS location verified  
 <br>
 4️⃣ Attendance recorded
 
-</p>
+</div>
 
-<button onclick="startScanner()" 
-class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold">
+<button onclick="startScanner()"
+class="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 font-semibold hover:scale-105 transition">
 
 Start Attendance
 
@@ -48,26 +65,29 @@ Start Attendance
 
 </div>
 
-<!-- SCANNER AREA -->
 
 <div id="scanner" class="hidden">
 
-<div id="reader" class="mb-4"></div>
+<div id="reader" class="rounded-xl overflow-hidden mb-4"></div>
 
-<p id="status" class="text-sm text-gray-600"></p>
-
-</div>
+<p id="status" class="text-sm text-gray-300"></p>
 
 </div>
 
-<footer class="absolute bottom-5 text-white text-sm">
+</div>
+
+
+<footer class="absolute bottom-6 text-sm text-gray-400">
 
 Developed by 
-<a href="https://ahtasamzidan.vercel.app" target="_blank" class="underline font-semibold">
+<a href="https://ahtasamzidan.vercel.app" target="_blank" class="text-indigo-400 hover:underline">
+
 Ahtasam Zidan
+
 </a>
 
 </footer>
+
 
 <script>
 
@@ -85,13 +105,9 @@ Html5Qrcode.getCameras().then(devices => {
 let backCamera = devices[devices.length - 1].id
 
 html5QrCode.start(
-
 backCamera,
-
 { fps:10, qrbox:250 },
-
 onScanSuccess
-
 )
 
 })
@@ -110,9 +126,8 @@ let mapLink = "https://maps.google.com/?q="+lat+","+lng
 document.getElementById("status").innerHTML=
 
 "✅ QR: "+decodedText+
-"<br>📍 Lat: "+lat+
-"<br>📍 Lng: "+lng+
-"<br><a href='"+mapLink+"' target='_blank' class='text-indigo-600 underline'>Open Location</a>"
+"<br>📍 "+lat+", "+lng+
+"<br><a href='"+mapLink+"' target='_blank' class='text-indigo-400 underline'>Open Map</a>"
 
 })
 

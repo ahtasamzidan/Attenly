@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Attenly</title>
 
@@ -12,23 +13,57 @@
 
 </head>
 
-<body class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 min-h-screen flex items-center justify-center">
+<body class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 min-h-screen flex items-center justify-center text-white">
 
-<div class="bg-white p-6 rounded-3xl shadow-xl w-96 text-center">
+<div class="bg-white text-gray-800 rounded-3xl shadow-xl p-6 w-96 text-center">
 
 <h1 class="text-3xl font-bold mb-2">Attenly</h1>
-<p class="text-gray-500 mb-4">Scan QR to Check In</p>
+<p class="text-gray-500 mb-4">Smart QR Attendance</p>
 
-<div id="reader"></div>
+<!-- PROCESS STEPS -->
 
-<p id="status" class="text-sm mt-4 text-gray-600"></p>
+<div id="intro">
+
+<img src="https://cdn-icons-png.flaticon.com/512/942/942748.png" 
+class="w-20 mx-auto mb-4">
+
+<p class="text-sm text-gray-600 mb-4">
+
+1️⃣ Press Start Attendance  
+<br>
+2️⃣ Scan the QR Code  
+<br>
+3️⃣ GPS location verified  
+<br>
+4️⃣ Attendance recorded
+
+</p>
+
+<button onclick="startScanner()" 
+class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold">
+
+Start Attendance
+
+</button>
 
 </div>
 
-<footer class="absolute bottom-4 text-white text-sm">
+<!-- SCANNER AREA -->
+
+<div id="scanner" class="hidden">
+
+<div id="reader" class="mb-4"></div>
+
+<p id="status" class="text-sm text-gray-600"></p>
+
+</div>
+
+</div>
+
+<footer class="absolute bottom-5 text-white text-sm">
 
 Developed by 
-<a href="https://ahtasamzidan.vercel.app" class="underline">
+<a href="https://ahtasamzidan.vercel.app" target="_blank" class="underline font-semibold">
 Ahtasam Zidan
 </a>
 
@@ -36,53 +71,14 @@ Ahtasam Zidan
 
 <script>
 
-let officeLat = 3.1390
-let officeLng = 101.6869
+let html5QrCode
 
-function sendData(qr, lat, lng){
+function startScanner(){
 
-let mapLink = "https://maps.google.com/?q="+lat+","+lng
-let time = new Date().toLocaleString()
+document.getElementById("intro").style.display="none"
+document.getElementById("scanner").style.display="block"
 
-fetch("YOUR_GOOGLE_SCRIPT_URL",{
-
-method:"POST",
-
-body: JSON.stringify({
-
-qr:qr,
-lat:lat,
-lng:lng,
-map:mapLink,
-time:time
-
-})
-
-})
-
-}
-
-function onScanSuccess(decodedText){
-
-navigator.geolocation.getCurrentPosition(function(position){
-
-let lat = position.coords.latitude
-let lng = position.coords.longitude
-
-document.getElementById("status").innerHTML =
-
-"QR: "+decodedText+"<br>"+
-"Latitude: "+lat+"<br>"+
-"Longitude: "+lng+"<br>"+
-"<a href='https://maps.google.com/?q="+lat+","+lng+"' target='_blank'>Open Location</a>"
-
-sendData(decodedText, lat, lng)
-
-})
-
-}
-
-const html5QrCode = new Html5Qrcode("reader")
+html5QrCode = new Html5Qrcode("reader")
 
 Html5Qrcode.getCameras().then(devices => {
 
@@ -99,6 +95,28 @@ onScanSuccess
 )
 
 })
+
+}
+
+function onScanSuccess(decodedText){
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+let lat = position.coords.latitude
+let lng = position.coords.longitude
+
+let mapLink = "https://maps.google.com/?q="+lat+","+lng
+
+document.getElementById("status").innerHTML=
+
+"✅ QR: "+decodedText+
+"<br>📍 Lat: "+lat+
+"<br>📍 Lng: "+lng+
+"<br><a href='"+mapLink+"' target='_blank' class='text-indigo-600 underline'>Open Location</a>"
+
+})
+
+}
 
 </script>
 

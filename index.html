@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Attenly</title>
 
@@ -13,30 +12,23 @@
 
 </head>
 
-<body class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 min-h-screen flex flex-col items-center justify-center text-white">
+<body class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 min-h-screen flex items-center justify-center">
 
-<div class="bg-white text-gray-800 rounded-3xl shadow-2xl p-6 w-96 text-center">
+<div class="bg-white p-6 rounded-3xl shadow-xl w-96 text-center">
 
 <h1 class="text-3xl font-bold mb-2">Attenly</h1>
-<p class="text-gray-500 mb-4">Smart QR Attendance</p>
+<p class="text-gray-500 mb-4">Scan QR to Check In</p>
 
-<div id="reader" class="rounded-xl overflow-hidden mb-4"></div>
+<div id="reader"></div>
 
-<button onclick="getLocation()" 
-class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold transition">
-
-Verify GPS Location
-
-</button>
-
-<p id="location" class="text-sm text-gray-500 mt-3"></p>
+<p id="status" class="text-sm mt-4 text-gray-600"></p>
 
 </div>
 
-<footer class="absolute bottom-5 text-sm text-white opacity-80">
+<footer class="absolute bottom-4 text-white text-sm">
 
 Developed by 
-<a href="https://ahtasamzidan.vercel.app" target="_blank" class="underline font-semibold">
+<a href="https://ahtasamzidan.vercel.app" class="underline">
 Ahtasam Zidan
 </a>
 
@@ -44,32 +36,69 @@ Ahtasam Zidan
 
 <script>
 
-function onScanSuccess(decodedText) {
+let officeLat = 3.1390
+let officeLng = 101.6869
 
-alert("QR Code Scanned: " + decodedText)
+function sendData(qr, lat, lng){
+
+let mapLink = "https://maps.google.com/?q="+lat+","+lng
+let time = new Date().toLocaleString()
+
+fetch("YOUR_GOOGLE_SCRIPT_URL",{
+
+method:"POST",
+
+body: JSON.stringify({
+
+qr:qr,
+lat:lat,
+lng:lng,
+map:mapLink,
+time:time
+
+})
+
+})
 
 }
 
-let scanner = new Html5QrcodeScanner(
-"reader",
-{ fps:10, qrbox:220 }
-)
-
-scanner.render(onScanSuccess)
-
-function getLocation(){
+function onScanSuccess(decodedText){
 
 navigator.geolocation.getCurrentPosition(function(position){
 
 let lat = position.coords.latitude
 let lng = position.coords.longitude
 
-document.getElementById("location").innerText =
-"Latitude: " + lat + " | Longitude: " + lng
+document.getElementById("status").innerHTML =
+
+"QR: "+decodedText+"<br>"+
+"Latitude: "+lat+"<br>"+
+"Longitude: "+lng+"<br>"+
+"<a href='https://maps.google.com/?q="+lat+","+lng+"' target='_blank'>Open Location</a>"
+
+sendData(decodedText, lat, lng)
 
 })
 
 }
+
+const html5QrCode = new Html5Qrcode("reader")
+
+Html5Qrcode.getCameras().then(devices => {
+
+let backCamera = devices[devices.length - 1].id
+
+html5QrCode.start(
+
+backCamera,
+
+{ fps:10, qrbox:250 },
+
+onScanSuccess
+
+)
+
+})
 
 </script>
 

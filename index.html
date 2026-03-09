@@ -1,34 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Smart Attendance</title>
+<title>Attenly</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 </head>
 
-<body class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 min-h-screen flex items-center justify-center">
+<body class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 min-h-screen flex flex-col items-center justify-center text-white">
 
-<div class="bg-white rounded-2xl shadow-2xl p-6 w-96 text-center">
+<div class="bg-white text-gray-800 rounded-3xl shadow-2xl p-6 w-96 text-center">
 
-<h1 class="text-2xl font-bold text-gray-800 mb-2">
-Smart Attendance
-</h1>
+<h1 class="text-3xl font-bold mb-2">Attenly</h1>
+<p class="text-gray-500 mb-4">Smart QR Attendance</p>
 
-<p class="text-gray-500 mb-4">
-Scan QR to Check In
-</p>
-
-<div id="reader" class="rounded-xl overflow-hidden"></div>
+<div id="reader" class="rounded-xl overflow-hidden mb-4"></div>
 
 <button onclick="getLocation()" 
-class="mt-5 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold transition">
+class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold transition">
 
-Capture GPS Location
+Verify GPS Location
 
 </button>
 
@@ -36,25 +33,39 @@ Capture GPS Location
 
 </div>
 
+<footer class="absolute bottom-5 text-sm text-white opacity-80">
+
+Developed by 
+<a href="https://ahtasamzidan.vercel.app" target="_blank" class="underline font-semibold">
+Ahtasam Zidan
+</a>
+
+</footer>
+
 <script>
 
 function onScanSuccess(decodedText) {
 
-alert("QR Scanned: " + decodedText)
+alert("QR Code Scanned: " + decodedText)
 
 }
 
-let scanner = new Html5QrcodeScanner("reader",{ fps:10, qrbox:200 })
+let scanner = new Html5QrcodeScanner(
+"reader",
+{ fps:10, qrbox:220 }
+)
 
 scanner.render(onScanSuccess)
 
-function getLocation() {
+function getLocation(){
 
 navigator.geolocation.getCurrentPosition(function(position){
 
+let lat = position.coords.latitude
+let lng = position.coords.longitude
+
 document.getElementById("location").innerText =
-"Lat: " + position.coords.latitude +
-" | Lng: " + position.coords.longitude
+"Latitude: " + lat + " | Longitude: " + lng
 
 })
 

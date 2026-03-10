@@ -211,9 +211,10 @@ font-weight:600;
 /* how it works */
 
 .how-works{
-margin-top:30px;
+margin-top:40px;
 text-align:center;
 color:white;
+padding:0 20px;
 }
 
 .steps{
@@ -221,6 +222,7 @@ display:flex;
 justify-content:center;
 gap:15px;
 margin-top:15px;
+flex-wrap:wrap; /* important */
 }
 
 .step{
@@ -253,4 +255,17 @@ font-size:13px;
 0%{transform:translateY(0px)}
 50%{transform:translateY(-6px)}
 100%{transform:translateY(0px)}
+}
+@media (max-width:768px){
+
+.steps{
+flex-direction:column;
+align-items:center;
+}
+
+.step{
+width:80%;
+max-width:220px;
+}
+
 }

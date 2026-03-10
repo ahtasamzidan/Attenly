@@ -141,6 +141,18 @@ text-align:center;
 max-width:280px;
 font-family:sans-serif;
 animation:pop 0.3s ease;
+color:#111; /* FIX: text color */
+}
+
+.popup-card h2{
+color:#16a34a; /* title color */
+margin-bottom:8px;
+font-size:20px;
+}
+
+.popup-card p{
+color:#444; /* message color */
+font-size:15px;
 }
 
 .popup-icon{

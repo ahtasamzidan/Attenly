@@ -16,13 +16,13 @@ alert("Please enter your name")
 return
 }
 
-document.getElementById("scanner").classList.remove("hidden")
+document.getElementById("scanner").style.display = "block"
 
 html5QrCode = new Html5Qrcode("reader")
 
 Html5Qrcode.getCameras().then(devices => {
 
-let backCamera = devices[devices.length - 1].id
+let backCamera = devices[devices.length-1].id
 
 html5QrCode.start(
 backCamera,
@@ -85,7 +85,6 @@ type:type
 })
 })
 
-.then(()=>{
 playBeep()
 flashSuccess()
 
@@ -97,27 +96,25 @@ showPopup("Leave Recorded","See you tomorrow!")
 
 })
 
-})
-
 }
 
 /* popup */
 
-function showPopup(title,msg){
+function showPopup(title,message){
 
 const popup = document.createElement("div")
 
-popup.innerHTML = `
-<div class="success-overlay">
-<div class="success-card">
+popup.className = "success-popup"
 
-<div class="success-icon">✔</div>
+popup.innerHTML = `
+<div class="popup-card">
+
+<div class="popup-icon">✔</div>
 
 <h2>${title}</h2>
 
-<p>${msg}</p>
+<p>${message}</p>
 
-</div>
 </div>
 `
 
@@ -140,7 +137,7 @@ const oscillator = ctx.createOscillator()
 const gain = ctx.createGain()
 
 oscillator.type = "sine"
-oscillator.frequency.value = 880
+oscillator.frequency.value = 900
 
 oscillator.connect(gain)
 gain.connect(ctx.destination)
@@ -159,6 +156,7 @@ ctx.close()
 function flashSuccess(){
 
 const flash = document.createElement("div")
+
 flash.className = "success-flash"
 
 document.body.appendChild(flash)

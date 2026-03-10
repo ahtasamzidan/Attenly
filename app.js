@@ -49,10 +49,13 @@ return
 
 let map = "https://maps.google.com/?q="+lat+","+lng
 
+let location = lat + "," + lng
+
 let date = new Date().toLocaleDateString()
+
 let time = new Date().toLocaleTimeString()
 
-fetch("https://script.google.com/macros/s/AKfycbygOybGfMswz5MoRuw3SyBaE8OZxcO5RW8LPiW-Kqz8xulVzU-_D4NOwyLUxj86b_TF/exec",{
+fetch("YOUR_SCRIPT_URL",{
 
 method:"POST",
 
@@ -60,8 +63,7 @@ body:JSON.stringify({
 
 name:name,
 qr:qrText,
-lat:lat,
-lng:lng,
+location:location,
 map:map,
 date:date,
 time:time
@@ -70,7 +72,13 @@ time:time
 
 })
 
-document.getElementById("success").classList.remove("hidden")
+/* stop scanner */
+
+html5QrCode.stop()
+
+/* success popup */
+
+alert("✔ Attendance recorded successfully")
 
 })
 

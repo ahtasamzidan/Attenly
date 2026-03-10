@@ -194,14 +194,14 @@ text-align:center;
 margin-bottom:15px;
 }
 
-.company-logo{
+.logo-header{
 width:150px;
 height:100px;
 border-radius:12px;
 margin-bottom:6px;
 }
 
-.company-name{
+.header{
 color:white;
 font-size:18px;
 font-weight:600;

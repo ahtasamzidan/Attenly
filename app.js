@@ -1,6 +1,6 @@
-const officeLat = 3.1390
-const officeLng = 101.6869
-const radius = 120
+const officeLat = 4.6413110
+const officeLng = 101.1104088
+const radius = 250
 
 let html5QrCode
 

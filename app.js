@@ -55,7 +55,7 @@ let date = new Date().toLocaleDateString()
 
 let time = new Date().toLocaleTimeString()
 
-fetch("https://script.google.com/macros/s/AKfycbygOybGfMswz5MoRuw3SyBaE8OZxcO5RW8LPiW-Kqz8xulVzU-_D4NOwyLUxj86b_TF/exec",{
+fetch("https://script.google.com/macros/s/AKfycbze0hS19plavqgGrLxI8d3b9XMmZEiGmqKF8BST0wig3q925SlSYqbcjbHWIzalc4v8/exec",{
 
 method:"POST",
 

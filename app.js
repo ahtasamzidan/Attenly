@@ -18,11 +18,11 @@ return
 
 document.getElementById("scanner").classList.remove("hidden")
 
-html5QrCode = new Html5QrCode("reader")
+html5QrCode = new Html5Qrcode("reader")
 
-Html5QrCode.getCameras().then(devices => {
+Html5Qrcode.getCameras().then(devices => {
 
-let backCamera = devices[devices.length-1].id
+let backCamera = devices[devices.length - 1].id
 
 html5QrCode.start(
 backCamera,
@@ -73,11 +73,8 @@ let type = hour < 12 ? "Intime" : "Outtime"
 html5QrCode.stop()
 
 fetch(SCRIPT_URL,{
-
 method:"POST",
-
 body:JSON.stringify({
-
 name:name,
 qr:qrText,
 location:location,
@@ -85,24 +82,17 @@ map:map,
 date:date,
 time:time,
 type:type
-
 })
-
 })
 
 .then(()=>{
-
 playBeep()
 flashSuccess()
 
 if(type === "Intime"){
-
 showPopup("Attendance Recorded","Welcome!")
-
 }else{
-
 showPopup("Leave Recorded","See you tomorrow!")
-
 }
 
 })
@@ -111,7 +101,7 @@ showPopup("Leave Recorded","See you tomorrow!")
 
 }
 
-/* popup animation */
+/* popup */
 
 function showPopup(title,msg){
 
@@ -169,7 +159,6 @@ ctx.close()
 function flashSuccess(){
 
 const flash = document.createElement("div")
-
 flash.className = "success-flash"
 
 document.body.appendChild(flash)

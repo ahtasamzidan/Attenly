@@ -2,7 +2,7 @@ const officeLat = 4.6413110
 const officeLng = 101.1104088
 const radius = 250
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxB-vw9QpqL0M3I0TCdub5_iV3og8RmD5sJTUKx327oJbdsY2Q1UonhqfgQyIifpsS_/exec"
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjMMbmgWmMCPXmq_Qs2FK5ccLdLyxBn5KIAkoS0SnFP5z-Xex3d_ppKsPtqcaljsIE/exec"
 
 let html5QrCode
 let scanned = false

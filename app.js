@@ -2,7 +2,10 @@ const officeLat = 4.6413110
 const officeLng = 101.1104088
 const radius = 250
 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxB-vw9QpqL0M3I0TCdub5_iV3og8RmD5sJTUKx327oJbdsY2Q1UonhqfgQyIifpsS_/exec"
+
 let html5QrCode
+let scanned = false
 
 function startScanner(){
 
@@ -15,17 +18,24 @@ return
 
 document.getElementById("scanner").classList.remove("hidden")
 
-html5QrCode = new Html5Qrcode("reader")
+html5QrCode = new Html5QrCode("reader")
 
-Html5Qrcode.getCameras().then(devices => {
+Html5QrCode.getCameras().then(devices => {
 
 let backCamera = devices[devices.length-1].id
 
 html5QrCode.start(
 backCamera,
 { fps:10, qrbox:250 },
-text => onScan(text,name)
-)
+(decodedText) => {
+
+if(scanned) return
+
+scanned = true
+
+onScan(decodedText,name)
+
+})
 
 })
 
@@ -43,6 +53,7 @@ let dist = distance(lat,lng,officeLat,officeLng)
 if(dist > radius){
 
 alert("You are outside office location")
+scanned = false
 return
 
 }
@@ -55,19 +66,13 @@ let now = new Date()
 let date = now.toLocaleDateString()
 let time = now.toLocaleTimeString()
 
-/* Detect morning or afternoon */
-
 let hour = now.getHours()
 
-let type
+let type = hour < 12 ? "Intime" : "Outtime"
 
-if(hour < 12){
-type = "Intime"
-}else{
-type = "Outtime"
-}
+html5QrCode.stop()
 
-fetch("https://script.google.com/macros/s/AKfycbxB-vw9QpqL0M3I0TCdub5_iV3og8RmD5sJTUKx327oJbdsY2Q1UonhqfgQyIifpsS_/exec",{
+fetch(SCRIPT_URL,{
 
 method:"POST",
 
@@ -85,26 +90,18 @@ type:type
 
 })
 
-.then(res => res.text())
-.then(msg => {
+.then(()=>{
 
-/* stop scanner */
+playBeep()
+flashSuccess()
 
-html5QrCode.stop()
+if(type === "Intime"){
 
-if(type == "Intime"){
-
-showPopup(
-"Attendance recorded successfully",
-"Welcome!"
-)
+showPopup("Attendance Recorded","Welcome!")
 
 }else{
 
-showPopup(
-"Leave recorded successfully",
-"See you tomorrow!"
-)
+showPopup("Leave Recorded","See you tomorrow!")
 
 }
 
@@ -116,35 +113,19 @@ showPopup(
 
 /* popup animation */
 
-function showPopup(title,subtitle){
+function showPopup(title,msg){
 
 const popup = document.createElement("div")
 
 popup.innerHTML = `
-<div style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.6);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;
-">
+<div class="success-overlay">
+<div class="success-card">
 
-<div style="
-background:white;
-padding:30px;
-border-radius:12px;
-text-align:center;
-max-width:300px;
-font-family:sans-serif;
-">
+<div class="success-icon">✔</div>
 
-<h2 style="color:#16a34a">${title}</h2>
-<p>${subtitle}</p>
+<h2>${title}</h2>
+
+<p>${msg}</p>
 
 </div>
 </div>
@@ -154,7 +135,48 @@ document.body.appendChild(popup)
 
 setTimeout(()=>{
 popup.remove()
-},3000)
+scanned = false
+},2500)
+
+}
+
+/* beep sound */
+
+function playBeep(){
+
+const ctx = new (window.AudioContext || window.webkitAudioContext)()
+
+const oscillator = ctx.createOscillator()
+const gain = ctx.createGain()
+
+oscillator.type = "sine"
+oscillator.frequency.value = 880
+
+oscillator.connect(gain)
+gain.connect(ctx.destination)
+
+oscillator.start()
+
+setTimeout(()=>{
+oscillator.stop()
+ctx.close()
+},150)
+
+}
+
+/* green flash */
+
+function flashSuccess(){
+
+const flash = document.createElement("div")
+
+flash.className = "success-flash"
+
+document.body.appendChild(flash)
+
+setTimeout(()=>{
+flash.remove()
+},400)
 
 }
 

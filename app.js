@@ -67,7 +67,7 @@ type = "Intime"
 type = "Outtime"
 }
 
-fetch("YOUR_SCRIPT_URL",{
+fetch("https://script.google.com/macros/s/AKfycbxB-vw9QpqL0M3I0TCdub5_iV3og8RmD5sJTUKx327oJbdsY2Q1UonhqfgQyIifpsS_/exec",{
 
 method:"POST",
 

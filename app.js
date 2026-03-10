@@ -48,14 +48,26 @@ return
 }
 
 let map = "https://maps.google.com/?q="+lat+","+lng
-
 let location = lat + "," + lng
 
-let date = new Date().toLocaleDateString()
+let now = new Date()
 
-let time = new Date().toLocaleTimeString()
+let date = now.toLocaleDateString()
+let time = now.toLocaleTimeString()
 
-fetch("https://script.google.com/macros/s/AKfycbze0hS19plavqgGrLxI8d3b9XMmZEiGmqKF8BST0wig3q925SlSYqbcjbHWIzalc4v8/exec",{
+/* Detect morning or afternoon */
+
+let hour = now.getHours()
+
+let type
+
+if(hour < 12){
+type = "Intime"
+}else{
+type = "Outtime"
+}
+
+fetch("YOUR_SCRIPT_URL",{
 
 method:"POST",
 
@@ -66,21 +78,83 @@ qr:qrText,
 location:location,
 map:map,
 date:date,
-time:time
+time:time,
+type:type
 
 })
 
 })
+
+.then(res => res.text())
+.then(msg => {
 
 /* stop scanner */
 
 html5QrCode.stop()
 
-/* success popup */
+if(type == "Intime"){
 
-alert("✔ Attendance recorded successfully")
+showPopup(
+"Attendance recorded successfully",
+"Welcome!"
+)
+
+}else{
+
+showPopup(
+"Leave recorded successfully",
+"See you tomorrow!"
+)
+
+}
 
 })
+
+})
+
+}
+
+/* popup animation */
+
+function showPopup(title,subtitle){
+
+const popup = document.createElement("div")
+
+popup.innerHTML = `
+<div style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+">
+
+<div style="
+background:white;
+padding:30px;
+border-radius:12px;
+text-align:center;
+max-width:300px;
+font-family:sans-serif;
+">
+
+<h2 style="color:#16a34a">${title}</h2>
+<p>${subtitle}</p>
+
+</div>
+</div>
+`
+
+document.body.appendChild(popup)
+
+setTimeout(()=>{
+popup.remove()
+},3000)
 
 }
 

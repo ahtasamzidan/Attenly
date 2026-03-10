@@ -118,3 +118,59 @@ footer a{
 color:#818cf8;
 text-decoration:none;
 }
+
+.success-overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+animation:fadeIn 0.3s ease;
+}
+
+.success-card{
+background:white;
+padding:30px;
+border-radius:14px;
+text-align:center;
+max-width:280px;
+font-family:sans-serif;
+animation:pop 0.3s ease;
+}
+
+.success-icon{
+font-size:40px;
+color:#16a34a;
+margin-bottom:10px;
+}
+
+.success-flash{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(34,197,94,0.35);
+z-index:9998;
+animation:flashFade 0.4s ease;
+}
+
+@keyframes pop{
+0%{transform:scale(0.7)}
+100%{transform:scale(1)}
+}
+
+@keyframes fadeIn{
+0%{opacity:0}
+100%{opacity:1}
+}
+
+@keyframes flashFade{
+0%{opacity:1}
+100%{opacity:0}
+}

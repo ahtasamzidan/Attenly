@@ -250,17 +250,6 @@ font-size:13px;
 0%{transform:translateY(0px)}
 50%{transform:translateY(-6px)}
 100%{transform:translateY(0px)}
-}
-@media (max-width:768px){
 
-.steps{
-flex-direction:column;
-align-items:center;
-}
-
-.step{
-width:80%;
-max-width:220px;
-}
 
 }
